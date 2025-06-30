@@ -1,4 +1,4 @@
-CREATE DATABASE "bd-catalogo-vagas";
+CREATE DATABASE "bd_catalogo_vagas";
 
 -- Tabela de Pessoa
 CREATE TABLE PESSOA (
