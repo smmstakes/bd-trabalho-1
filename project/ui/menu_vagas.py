@@ -70,8 +70,7 @@ class MenuVagas:
                 cpf_prof = self._selecionar_professor()
             
             if (cnpj is None and cpf_prof is None): 
-                console.print("[bold red]\nErro: A vaga deve ter um CNPJ ou CPF responsável pela vaga." \
-                "[/bold red]")
+                console.print("[bold red]\nErro: A vaga deve ter um CNPJ ou CPF responsável pela vaga.[/bold red]")
 
                 input("\nPressione Enter para continuar...")
                 return

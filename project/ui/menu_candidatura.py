@@ -114,12 +114,10 @@ class MenuCandidatura:
             input("\nPressione Enter para continuar...")
             return
         
-        cpf_aluno = self._selecionar_aluno("Agora, escolha o aluno para atualizar o status",
-                                           candidatos_da_vaga=id_vaga)
+        cpf_aluno = self._selecionar_aluno("Agora, escolha o aluno para atualizar o status")
         if not cpf_aluno: 
             return
-        novo_status = solicitar_entrada_obrigatoria("Digite o novo status", 
-            "(Ex: Enviada, Em análise, Aprovada, Rejeitada)")
+        novo_status = solicitar_entrada_obrigatoria("Digite o novo status. (Ex: Enviada, Em análise, Aprovada, Rejeitada)")
 
         candidatura = Candidatura(cpf_aluno=cpf_aluno, id_vaga=id_vaga, status='', arquivo_curriculo=b'')
 
@@ -204,8 +202,7 @@ class MenuCandidatura:
     def _busca_candidatura_aluno(self, cpf_aluno):
         candidaturas = Candidatura.get_by_aluno(cpf_aluno)
         if not candidaturas:
-            console.print(f"\n[yellow]Nenhuma candidatura encontrada",
-                          f"para o aluno com CPF {cpf_aluno}.[/yellow]")
+            console.print(f"\n[yellow]Nenhuma candidatura encontrada para o aluno com CPF {cpf_aluno}.[/yellow]")
             
             input("\nPressione Enter para continuar...")
             return
