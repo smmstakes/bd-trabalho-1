@@ -5,7 +5,7 @@
 -- Dumped from database version 14.18 (Ubuntu 14.18-0ubuntu0.22.04.1)
 -- Dumped by pg_dump version 14.18 (Ubuntu 14.18-0ubuntu0.22.04.1)
 
--- Started on 2025-07-07 15:39:08 -03
+-- Started on 2025-07-08 09:10:00 -03
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -19,7 +19,7 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- TOC entry 232 (class 1255 OID 16842)
+-- TOC entry 232 (class 1255 OID 17010)
 -- Name: atualizar_interesses_aluno(character, integer[]); Type: PROCEDURE; Schema: public; Owner: postgres
 --
 
@@ -66,7 +66,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- TOC entry 214 (class 1259 OID 16697)
+-- TOC entry 214 (class 1259 OID 16865)
 -- Name: aluno; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -81,7 +81,7 @@ CREATE TABLE public.aluno (
 ALTER TABLE public.aluno OWNER TO postgres;
 
 --
--- TOC entry 226 (class 1259 OID 16805)
+-- TOC entry 226 (class 1259 OID 16973)
 -- Name: aluno_interesse; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -94,7 +94,7 @@ CREATE TABLE public.aluno_interesse (
 ALTER TABLE public.aluno_interesse OWNER TO postgres;
 
 --
--- TOC entry 224 (class 1259 OID 16784)
+-- TOC entry 224 (class 1259 OID 16952)
 -- Name: area_de_interesse; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -107,7 +107,7 @@ CREATE TABLE public.area_de_interesse (
 ALTER TABLE public.area_de_interesse OWNER TO postgres;
 
 --
--- TOC entry 223 (class 1259 OID 16783)
+-- TOC entry 223 (class 1259 OID 16951)
 -- Name: area_de_interesse_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -132,7 +132,7 @@ ALTER SEQUENCE public.area_de_interesse_id_seq OWNED BY public.area_de_interesse
 
 
 --
--- TOC entry 225 (class 1259 OID 16790)
+-- TOC entry 225 (class 1259 OID 16958)
 -- Name: area_vaga; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -145,7 +145,7 @@ CREATE TABLE public.area_vaga (
 ALTER TABLE public.area_vaga OWNER TO postgres;
 
 --
--- TOC entry 227 (class 1259 OID 16820)
+-- TOC entry 227 (class 1259 OID 16988)
 -- Name: candidatura; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -161,7 +161,7 @@ CREATE TABLE public.candidatura (
 ALTER TABLE public.candidatura OWNER TO postgres;
 
 --
--- TOC entry 213 (class 1259 OID 16691)
+-- TOC entry 213 (class 1259 OID 16859)
 -- Name: curso; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -174,7 +174,7 @@ CREATE TABLE public.curso (
 ALTER TABLE public.curso OWNER TO postgres;
 
 --
--- TOC entry 212 (class 1259 OID 16690)
+-- TOC entry 212 (class 1259 OID 16858)
 -- Name: curso_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -199,7 +199,7 @@ ALTER SEQUENCE public.curso_id_seq OWNED BY public.curso.id;
 
 
 --
--- TOC entry 211 (class 1259 OID 16684)
+-- TOC entry 211 (class 1259 OID 16852)
 -- Name: departamento; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -212,7 +212,7 @@ CREATE TABLE public.departamento (
 ALTER TABLE public.departamento OWNER TO postgres;
 
 --
--- TOC entry 210 (class 1259 OID 16683)
+-- TOC entry 210 (class 1259 OID 16851)
 -- Name: departamento_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -237,7 +237,7 @@ ALTER SEQUENCE public.departamento_id_seq OWNED BY public.departamento.id;
 
 
 --
--- TOC entry 217 (class 1259 OID 16737)
+-- TOC entry 217 (class 1259 OID 16905)
 -- Name: empresa; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -257,7 +257,7 @@ CREATE TABLE public.empresa (
 ALTER TABLE public.empresa OWNER TO postgres;
 
 --
--- TOC entry 222 (class 1259 OID 16762)
+-- TOC entry 222 (class 1259 OID 16930)
 -- Name: vaga; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -277,7 +277,7 @@ CREATE TABLE public.vaga (
 ALTER TABLE public.vaga OWNER TO postgres;
 
 --
--- TOC entry 228 (class 1259 OID 16837)
+-- TOC entry 228 (class 1259 OID 17005)
 -- Name: mapeamentorelacaovagas; Type: VIEW; Schema: public; Owner: postgres
 --
 
@@ -293,11 +293,10 @@ CREATE VIEW public.mapeamentorelacaovagas AS
     round(avg(v.carga_horaria), 1) AS horas_medias,
     count(DISTINCT v.cnpj) AS empresas,
     count(DISTINCT v.cpf) AS professores
-   FROM ((((public.area_de_interesse ai
+   FROM (((public.area_de_interesse ai
      LEFT JOIN public.area_vaga av ON ((ai.id = av.id_interesse)))
      LEFT JOIN public.vaga v ON ((av.id_vaga = v.id)))
      LEFT JOIN public.aluno_interesse al_i ON ((ai.id = al_i.id_interesse)))
-     LEFT JOIN public.aluno a ON ((al_i.cpf = a.cpf)))
   GROUP BY ai.id, ai.nome
   ORDER BY ai.id;
 
@@ -305,7 +304,7 @@ CREATE VIEW public.mapeamentorelacaovagas AS
 ALTER TABLE public.mapeamentorelacaovagas OWNER TO postgres;
 
 --
--- TOC entry 209 (class 1259 OID 16676)
+-- TOC entry 209 (class 1259 OID 16844)
 -- Name: pessoa; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -323,7 +322,7 @@ CREATE TABLE public.pessoa (
 ALTER TABLE public.pessoa OWNER TO postgres;
 
 --
--- TOC entry 215 (class 1259 OID 16712)
+-- TOC entry 215 (class 1259 OID 16880)
 -- Name: professor; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -337,7 +336,7 @@ CREATE TABLE public.professor (
 ALTER TABLE public.professor OWNER TO postgres;
 
 --
--- TOC entry 218 (class 1259 OID 16744)
+-- TOC entry 218 (class 1259 OID 16912)
 -- Name: telefone_empresarial; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -350,7 +349,7 @@ CREATE TABLE public.telefone_empresarial (
 ALTER TABLE public.telefone_empresarial OWNER TO postgres;
 
 --
--- TOC entry 216 (class 1259 OID 16727)
+-- TOC entry 216 (class 1259 OID 16895)
 -- Name: telefone_pessoal; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -363,7 +362,7 @@ CREATE TABLE public.telefone_pessoal (
 ALTER TABLE public.telefone_pessoal OWNER TO postgres;
 
 --
--- TOC entry 220 (class 1259 OID 16755)
+-- TOC entry 220 (class 1259 OID 16923)
 -- Name: tipo; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -376,7 +375,7 @@ CREATE TABLE public.tipo (
 ALTER TABLE public.tipo OWNER TO postgres;
 
 --
--- TOC entry 219 (class 1259 OID 16754)
+-- TOC entry 219 (class 1259 OID 16922)
 -- Name: tipo_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -401,7 +400,7 @@ ALTER SEQUENCE public.tipo_id_seq OWNED BY public.tipo.id;
 
 
 --
--- TOC entry 221 (class 1259 OID 16761)
+-- TOC entry 221 (class 1259 OID 16929)
 -- Name: vaga_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -426,7 +425,7 @@ ALTER SEQUENCE public.vaga_id_seq OWNED BY public.vaga.id;
 
 
 --
--- TOC entry 3274 (class 2604 OID 16787)
+-- TOC entry 3274 (class 2604 OID 16955)
 -- Name: area_de_interesse id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -434,7 +433,7 @@ ALTER TABLE ONLY public.area_de_interesse ALTER COLUMN id SET DEFAULT nextval('p
 
 
 --
--- TOC entry 3271 (class 2604 OID 16694)
+-- TOC entry 3271 (class 2604 OID 16862)
 -- Name: curso id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -442,7 +441,7 @@ ALTER TABLE ONLY public.curso ALTER COLUMN id SET DEFAULT nextval('public.curso_
 
 
 --
--- TOC entry 3270 (class 2604 OID 16687)
+-- TOC entry 3270 (class 2604 OID 16855)
 -- Name: departamento id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -450,7 +449,7 @@ ALTER TABLE ONLY public.departamento ALTER COLUMN id SET DEFAULT nextval('public
 
 
 --
--- TOC entry 3272 (class 2604 OID 16758)
+-- TOC entry 3272 (class 2604 OID 16926)
 -- Name: tipo id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -458,7 +457,7 @@ ALTER TABLE ONLY public.tipo ALTER COLUMN id SET DEFAULT nextval('public.tipo_id
 
 
 --
--- TOC entry 3273 (class 2604 OID 16765)
+-- TOC entry 3273 (class 2604 OID 16933)
 -- Name: vaga id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -466,7 +465,7 @@ ALTER TABLE ONLY public.vaga ALTER COLUMN id SET DEFAULT nextval('public.vaga_id
 
 
 --
--- TOC entry 3304 (class 2606 OID 16809)
+-- TOC entry 3304 (class 2606 OID 16977)
 -- Name: aluno_interesse aluno_interesse_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -475,7 +474,7 @@ ALTER TABLE ONLY public.aluno_interesse
 
 
 --
--- TOC entry 3284 (class 2606 OID 16701)
+-- TOC entry 3284 (class 2606 OID 16869)
 -- Name: aluno aluno_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -484,7 +483,7 @@ ALTER TABLE ONLY public.aluno
 
 
 --
--- TOC entry 3300 (class 2606 OID 16789)
+-- TOC entry 3300 (class 2606 OID 16957)
 -- Name: area_de_interesse area_de_interesse_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -493,7 +492,7 @@ ALTER TABLE ONLY public.area_de_interesse
 
 
 --
--- TOC entry 3302 (class 2606 OID 16794)
+-- TOC entry 3302 (class 2606 OID 16962)
 -- Name: area_vaga area_vaga_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -502,7 +501,7 @@ ALTER TABLE ONLY public.area_vaga
 
 
 --
--- TOC entry 3306 (class 2606 OID 16826)
+-- TOC entry 3306 (class 2606 OID 16994)
 -- Name: candidatura candidatura_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -511,7 +510,7 @@ ALTER TABLE ONLY public.candidatura
 
 
 --
--- TOC entry 3282 (class 2606 OID 16696)
+-- TOC entry 3282 (class 2606 OID 16864)
 -- Name: curso curso_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -520,7 +519,7 @@ ALTER TABLE ONLY public.curso
 
 
 --
--- TOC entry 3280 (class 2606 OID 16689)
+-- TOC entry 3280 (class 2606 OID 16857)
 -- Name: departamento departamento_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -529,7 +528,7 @@ ALTER TABLE ONLY public.departamento
 
 
 --
--- TOC entry 3290 (class 2606 OID 16743)
+-- TOC entry 3290 (class 2606 OID 16911)
 -- Name: empresa empresa_email_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -538,7 +537,7 @@ ALTER TABLE ONLY public.empresa
 
 
 --
--- TOC entry 3292 (class 2606 OID 16741)
+-- TOC entry 3292 (class 2606 OID 16909)
 -- Name: empresa empresa_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -547,7 +546,7 @@ ALTER TABLE ONLY public.empresa
 
 
 --
--- TOC entry 3276 (class 2606 OID 16682)
+-- TOC entry 3276 (class 2606 OID 16850)
 -- Name: pessoa pessoa_matricula_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -556,7 +555,7 @@ ALTER TABLE ONLY public.pessoa
 
 
 --
--- TOC entry 3278 (class 2606 OID 16680)
+-- TOC entry 3278 (class 2606 OID 16848)
 -- Name: pessoa pessoa_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -565,7 +564,7 @@ ALTER TABLE ONLY public.pessoa
 
 
 --
--- TOC entry 3286 (class 2606 OID 16716)
+-- TOC entry 3286 (class 2606 OID 16884)
 -- Name: professor professor_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -574,7 +573,7 @@ ALTER TABLE ONLY public.professor
 
 
 --
--- TOC entry 3294 (class 2606 OID 16748)
+-- TOC entry 3294 (class 2606 OID 16916)
 -- Name: telefone_empresarial telefone_empresarial_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -583,7 +582,7 @@ ALTER TABLE ONLY public.telefone_empresarial
 
 
 --
--- TOC entry 3288 (class 2606 OID 16731)
+-- TOC entry 3288 (class 2606 OID 16899)
 -- Name: telefone_pessoal telefone_pessoal_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -592,7 +591,7 @@ ALTER TABLE ONLY public.telefone_pessoal
 
 
 --
--- TOC entry 3296 (class 2606 OID 16760)
+-- TOC entry 3296 (class 2606 OID 16928)
 -- Name: tipo tipo_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -601,7 +600,7 @@ ALTER TABLE ONLY public.tipo
 
 
 --
--- TOC entry 3298 (class 2606 OID 16767)
+-- TOC entry 3298 (class 2606 OID 16935)
 -- Name: vaga vaga_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -610,141 +609,141 @@ ALTER TABLE ONLY public.vaga
 
 
 --
--- TOC entry 3308 (class 2606 OID 16707)
+-- TOC entry 3308 (class 2606 OID 16875)
 -- Name: aluno aluno_cpf_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.aluno
-    ADD CONSTRAINT aluno_cpf_fkey FOREIGN KEY (cpf) REFERENCES public.pessoa(cpf);
+    ADD CONSTRAINT aluno_cpf_fkey FOREIGN KEY (cpf) REFERENCES public.pessoa(cpf) ON DELETE CASCADE;
 
 
 --
--- TOC entry 3307 (class 2606 OID 16702)
+-- TOC entry 3307 (class 2606 OID 16870)
 -- Name: aluno aluno_id_curso_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.aluno
-    ADD CONSTRAINT aluno_id_curso_fkey FOREIGN KEY (id_curso) REFERENCES public.curso(id);
+    ADD CONSTRAINT aluno_id_curso_fkey FOREIGN KEY (id_curso) REFERENCES public.curso(id) ON DELETE RESTRICT;
 
 
 --
--- TOC entry 3318 (class 2606 OID 16810)
+-- TOC entry 3318 (class 2606 OID 16978)
 -- Name: aluno_interesse aluno_interesse_cpf_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.aluno_interesse
-    ADD CONSTRAINT aluno_interesse_cpf_fkey FOREIGN KEY (cpf) REFERENCES public.aluno(cpf);
+    ADD CONSTRAINT aluno_interesse_cpf_fkey FOREIGN KEY (cpf) REFERENCES public.aluno(cpf) ON DELETE CASCADE;
 
 
 --
--- TOC entry 3319 (class 2606 OID 16815)
+-- TOC entry 3319 (class 2606 OID 16983)
 -- Name: aluno_interesse aluno_interesse_id_interesse_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.aluno_interesse
-    ADD CONSTRAINT aluno_interesse_id_interesse_fkey FOREIGN KEY (id_interesse) REFERENCES public.area_de_interesse(id);
+    ADD CONSTRAINT aluno_interesse_id_interesse_fkey FOREIGN KEY (id_interesse) REFERENCES public.area_de_interesse(id) ON DELETE CASCADE;
 
 
 --
--- TOC entry 3317 (class 2606 OID 16800)
+-- TOC entry 3317 (class 2606 OID 16968)
 -- Name: area_vaga area_vaga_id_interesse_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.area_vaga
-    ADD CONSTRAINT area_vaga_id_interesse_fkey FOREIGN KEY (id_interesse) REFERENCES public.area_de_interesse(id);
+    ADD CONSTRAINT area_vaga_id_interesse_fkey FOREIGN KEY (id_interesse) REFERENCES public.area_de_interesse(id) ON DELETE CASCADE;
 
 
 --
--- TOC entry 3316 (class 2606 OID 16795)
+-- TOC entry 3316 (class 2606 OID 16963)
 -- Name: area_vaga area_vaga_id_vaga_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.area_vaga
-    ADD CONSTRAINT area_vaga_id_vaga_fkey FOREIGN KEY (id_vaga) REFERENCES public.vaga(id);
+    ADD CONSTRAINT area_vaga_id_vaga_fkey FOREIGN KEY (id_vaga) REFERENCES public.vaga(id) ON DELETE CASCADE;
 
 
 --
--- TOC entry 3320 (class 2606 OID 16827)
+-- TOC entry 3320 (class 2606 OID 16995)
 -- Name: candidatura candidatura_cpf_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.candidatura
-    ADD CONSTRAINT candidatura_cpf_fkey FOREIGN KEY (cpf) REFERENCES public.aluno(cpf);
+    ADD CONSTRAINT candidatura_cpf_fkey FOREIGN KEY (cpf) REFERENCES public.aluno(cpf) ON DELETE CASCADE;
 
 
 --
--- TOC entry 3321 (class 2606 OID 16832)
+-- TOC entry 3321 (class 2606 OID 17000)
 -- Name: candidatura candidatura_id_vaga_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.candidatura
-    ADD CONSTRAINT candidatura_id_vaga_fkey FOREIGN KEY (id_vaga) REFERENCES public.vaga(id);
+    ADD CONSTRAINT candidatura_id_vaga_fkey FOREIGN KEY (id_vaga) REFERENCES public.vaga(id) ON DELETE CASCADE;
 
 
 --
--- TOC entry 3309 (class 2606 OID 16717)
+-- TOC entry 3309 (class 2606 OID 16885)
 -- Name: professor professor_cpf_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.professor
-    ADD CONSTRAINT professor_cpf_fkey FOREIGN KEY (cpf) REFERENCES public.pessoa(cpf);
+    ADD CONSTRAINT professor_cpf_fkey FOREIGN KEY (cpf) REFERENCES public.pessoa(cpf) ON DELETE CASCADE;
 
 
 --
--- TOC entry 3310 (class 2606 OID 16722)
+-- TOC entry 3310 (class 2606 OID 16890)
 -- Name: professor professor_id_departamento_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.professor
-    ADD CONSTRAINT professor_id_departamento_fkey FOREIGN KEY (id_departamento) REFERENCES public.departamento(id);
+    ADD CONSTRAINT professor_id_departamento_fkey FOREIGN KEY (id_departamento) REFERENCES public.departamento(id) ON DELETE RESTRICT;
 
 
 --
--- TOC entry 3312 (class 2606 OID 16749)
+-- TOC entry 3312 (class 2606 OID 16917)
 -- Name: telefone_empresarial telefone_empresarial_cnpj_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.telefone_empresarial
-    ADD CONSTRAINT telefone_empresarial_cnpj_fkey FOREIGN KEY (cnpj) REFERENCES public.empresa(cnpj);
+    ADD CONSTRAINT telefone_empresarial_cnpj_fkey FOREIGN KEY (cnpj) REFERENCES public.empresa(cnpj) ON DELETE CASCADE;
 
 
 --
--- TOC entry 3311 (class 2606 OID 16732)
+-- TOC entry 3311 (class 2606 OID 16900)
 -- Name: telefone_pessoal telefone_pessoal_cpf_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.telefone_pessoal
-    ADD CONSTRAINT telefone_pessoal_cpf_fkey FOREIGN KEY (cpf) REFERENCES public.pessoa(cpf);
+    ADD CONSTRAINT telefone_pessoal_cpf_fkey FOREIGN KEY (cpf) REFERENCES public.pessoa(cpf) ON DELETE CASCADE;
 
 
 --
--- TOC entry 3313 (class 2606 OID 16768)
+-- TOC entry 3313 (class 2606 OID 16936)
 -- Name: vaga vaga_cnpj_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.vaga
-    ADD CONSTRAINT vaga_cnpj_fkey FOREIGN KEY (cnpj) REFERENCES public.empresa(cnpj);
+    ADD CONSTRAINT vaga_cnpj_fkey FOREIGN KEY (cnpj) REFERENCES public.empresa(cnpj) ON DELETE CASCADE;
 
 
 --
--- TOC entry 3314 (class 2606 OID 16773)
+-- TOC entry 3314 (class 2606 OID 16941)
 -- Name: vaga vaga_cpf_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.vaga
-    ADD CONSTRAINT vaga_cpf_fkey FOREIGN KEY (cpf) REFERENCES public.professor(cpf);
+    ADD CONSTRAINT vaga_cpf_fkey FOREIGN KEY (cpf) REFERENCES public.professor(cpf) ON DELETE CASCADE;
 
 
 --
--- TOC entry 3315 (class 2606 OID 16778)
+-- TOC entry 3315 (class 2606 OID 16946)
 -- Name: vaga vaga_id_tipo_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.vaga
-    ADD CONSTRAINT vaga_id_tipo_fkey FOREIGN KEY (id_tipo) REFERENCES public.tipo(id);
+    ADD CONSTRAINT vaga_id_tipo_fkey FOREIGN KEY (id_tipo) REFERENCES public.tipo(id) ON DELETE RESTRICT;
 
 
--- Completed on 2025-07-07 15:39:08 -03
+-- Completed on 2025-07-08 09:10:00 -03
 
 --
 -- PostgreSQL database dump complete
