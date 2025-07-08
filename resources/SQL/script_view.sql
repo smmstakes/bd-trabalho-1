@@ -14,6 +14,5 @@ FROM area_de_interesse ai
 LEFT JOIN area_vaga av ON ai.id = av.id_interesse
 LEFT JOIN vaga v ON av.id_vaga = v.id
 LEFT JOIN aluno_interesse al_i ON ai.id = al_i.id_interesse
-LEFT JOIN aluno a ON al_i.cpf = a.cpf
 GROUP BY ai.id, ai.nome
 ORDER BY ai.id;
