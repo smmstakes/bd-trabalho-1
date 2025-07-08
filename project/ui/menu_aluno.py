@@ -193,8 +193,8 @@ class MenuAluno:
     def _busca_todos_cursos(self):
         cursos = Curso.get_all()
         if not cursos:
-            console.print("[bold red]Erro: Nenhum curso cadastrado no sistema.",
-                          "\Impossível cadastrar aluno.[/bold red]")
+            console.print("[bold red]Erro: Nenhum curso cadastrado no sistema.[/bold red]",
+                          "[bold red] \Impossível cadastrar aluno.[/bold red]")
 
             input("\nPressione Enter para continuar...")
             return
@@ -217,8 +217,8 @@ class MenuAluno:
         while True:
             cpf = solicitar_entrada_obrigatoria("CPF (11 dígitos, sem pontos)")
             if len(cpf) != 11 or not cpf.isdigit():
-                console.print("[bold red]Formato de CPF inválido.",
-                "Deve conter exatamente 11 dígitos numéricos.[/bold red]")
+                console.print("[bold red]Formato de CPF inválido.[/bold red]",
+                "[bold red]Deve conter exatamente 11 dígitos numéricos.[/bold red]")
                 continue
             
             if Aluno.get_by_cpf(cpf):
@@ -231,10 +231,10 @@ class MenuAluno:
         """Solicita e valida a Matrícula, verificando formato e existência no banco."""
 
         while True:
-            matricula = solicitar_entrada_obrigatoria("Matrícula (8 dígitos)")
-            if len(matricula) != 8:
-                console.print("[bold red]Formato de Matrícula inválida.",
-                "Deve ter 8 caracteres.[/bold red]")
+            matricula = solicitar_entrada_obrigatoria("Matrícula (9 dígitos)")
+            if len(matricula) != 9:
+                console.print("[bold red]Formato de Matrícula inválida.[/bold red]",
+                "[bold red]Deve ter 9 caracteres.[/bold red]")
                 continue
 
             if Aluno.get_by_matricula(matricula):
