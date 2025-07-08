@@ -125,24 +125,19 @@ class Vaga:
                 print("Vaga não encontrada.")
                 return 
 
-            cursor.execute("DELETE FROM AREA_VAGA WHERE ID_VAGA = %s", (self.id,))
-            cursor.execute("DELETE FROM CANDIDATURA WHERE ID_VAGA = %s", (self.id,))
-        
             cursor.execute("DELETE FROM VAGA WHERE id = %s", (self.id,))
             
+            if cursor.rowcount == 0:
+                print(f"Aviso: Nenhuma vaga encontrada com o ID {self.id}, nada foi removido.")
+            else:
+                print(f"Vaga ID {self.id} e suas dependências foram removidas com sucesso.")
+            
             conn.commit()
-
-            print(f"Vaga ID {self.id} e todas as suas dependências foram removidas com sucesso.")
-
 
         except Exception as e:
             if conn:
                 conn.rollback()
-            
-            if "is still referenced from table" in str(e):
-                print(f"Erro ao deletar a Vaga: Não é possível deletar a vaga pois há candidaturas",
-                      "associadas a esta vaga.\n")
-                
+
             print(f"Erro ao deletar Vaga: {e}")
 
         finally:
@@ -152,11 +147,6 @@ class Vaga:
 
     @classmethod 
     def get_all(cls):
-        """
-        Busca todas as vagas e retorna uma lista de objetos Vaga.
-        Usa LEFT JOIN para buscar o nome da empresa ou do professor, já que um deles pode ser nulo.
-        """
-
         vagas_obj = []
         conn = None
 
@@ -202,8 +192,6 @@ class Vaga:
     
     @classmethod
     def get_by_id(cls, vaga_id):
-        """Busca uma vaga específica pelo seu ID."""
-
         conn = None
         vaga_obj = None
 

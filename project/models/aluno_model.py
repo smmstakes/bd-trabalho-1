@@ -33,6 +33,7 @@ class Aluno:
             cursor.execute(sql_aluno, (self.cpf, self.url_lattes, self.semestre, self.id_curso))
 
             conn.commit()
+
             print(f"Aluno {self.nome} (CPF: {self.cpf}) criado com sucesso!")
 
         except Exception as e:
@@ -52,9 +53,6 @@ class Aluno:
                 conn.close()
 
     def update(self):
-        """
-        Atualiza os dados de um aluno existente no banco de dados.
-        """
         conn = None
         try:
             conn = connect_db()
@@ -77,6 +75,7 @@ class Aluno:
         except Exception as e:
             if conn:
                 conn.rollback()
+
             print(f"Erro ao atualizar aluno: {e}")
 
         finally:
@@ -85,17 +84,17 @@ class Aluno:
                 conn.close()
 
     def delete(self):
-        """Remove o aluno do banco de dados, seguindo a ordem correta de deleção."""
         conn = None
         try:
             conn = connect_db()
             cursor = conn.cursor()
 
-            cursor.execute("DELETE FROM ALUNO WHERE CPF = %s", (self.cpf,))
-            cursor.execute("DELETE FROM TELEFONE_PESSOAL WHERE CPF = %s", (self.cpf,))
             cursor.execute("DELETE FROM PESSOA WHERE CPF = %s", (self.cpf,))
-
-            print(f"Aluno com CPF {self.cpf} removido com sucesso!")
+            
+            if cursor.rowcount == 0:
+                print(f"Aviso: Nenhum aluno encontrado com o CPF {self.cpf}, nada foi removido.")
+            else:
+                print(f"Aluno com CPF {self.cpf} e todos os seus dados associados foram removidos com sucesso!")
 
             conn.commit()
 
@@ -111,7 +110,6 @@ class Aluno:
 
     @classmethod
     def get_by_cpf(cls, cpf):
-        """Busca um aluno específico pelo seu CPF."""
         conn = None
         aluno_obj = None
 
@@ -149,7 +147,6 @@ class Aluno:
     
     @classmethod
     def get_by_matricula(cls, matricula):
-        """Busca um aluno específico pela sua MATRÍCULA."""
         conn = None
 
         try:
@@ -178,8 +175,6 @@ class Aluno:
 
     @classmethod
     def get_all(cls):
-        """Busca todos os alunos no banco de dados e retorna uma lista de objetos Aluno."""
-
         alunos_obj = []
         conn = None
 

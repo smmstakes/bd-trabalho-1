@@ -11,7 +11,6 @@ class Candidatura:
 
     def __exists(self):
         conn = None
-
         try:
             conn = connect_db()
             cursor = conn.cursor()
@@ -31,12 +30,7 @@ class Candidatura:
                 conn.close()
     
     def create(self):
-        """
-        Cria um novo registro de candidatura no banco de dados.
-        """
-
         conn = None
-
         try:
             conn = connect_db()
             cursor = conn.cursor()
@@ -68,10 +62,6 @@ class Candidatura:
                 conn.close()
 
     def update_status(self, novo_status):
-        """
-        Atualiza o status de uma candidatura existente.
-        """
-
         conn = None
 
         try:
@@ -102,26 +92,21 @@ class Candidatura:
                 conn.close()
 
     def delete(self):
-        """
-        Remove o registro de candidatura do banco de dados.
-        """
-
         conn = None
 
         try:
             conn = connect_db()
             cursor = conn.cursor()
 
-            if not self.__exists():
-                print(f"Erro: Não existe candidatura para o aluno {self.cpf_aluno} na vaga {self.id_vaga}.")
-                return
-            
             cursor.execute("DELETE FROM CANDIDATURA WHERE CPF = %s AND ID_VAGA = %s", 
                            (self.cpf_aluno, self.id_vaga))
             
-            conn.commit()
+            if cursor.rowcount == 0:
+                print(f"Aviso: Nenhuma candidatura encontrada para o aluno {self.cpf_aluno} na vaga {self.id_vaga}.")
+            else:
+                print(f"Candidatura ({self.cpf_aluno}, {self.id_vaga}) removida com sucesso.")
 
-            print(f"Candidatura ({self.cpf_aluno}, {self.id_vaga}) removida com sucesso.")
+            conn.commit()
 
         except Exception as e:
             print(f"Erro ao remover candidatura: {e}")
@@ -135,11 +120,6 @@ class Candidatura:
 
     @classmethod
     def get_by_vaga(cls, id_vaga):
-        """
-        Busca todos os candidatos para uma vaga específica.
-        Retorna uma lista de tuplas com informações do aluno e da candidatura.
-        """
-
         candidatos = []
         conn = None
 
@@ -172,11 +152,6 @@ class Candidatura:
     
     @classmethod
     def get_by_aluno(cls, cpf_aluno):
-        """
-        Busca todas as candidaturas de um aluno específico.
-        Retorna uma lista de tuplas com informações da vaga e da candidatura.
-        """
-
         candidaturas = []
         conn = None
 
