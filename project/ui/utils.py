@@ -4,8 +4,6 @@ import subprocess
 from rich.prompt import Prompt
 from rich.console import Console
 
-import tkinter as tk
-from tkinter import filedialog
 
 console = Console()
 
@@ -21,9 +19,6 @@ def solicitar_entrada_obrigatoria(prompt_text):
             console.print("[bold red]Este campo é obrigatório. Por favor, forneça um valor.[/bold red]")
 
 def selecionar_arquivo():
-    root = tk.Tk()
-    root.withdraw()
-
     console.print("\n[bold yellow]Aguardando seleção de arquivo...[/bold yellow]")
 
     try: 
