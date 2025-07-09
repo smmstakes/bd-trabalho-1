@@ -2,7 +2,7 @@ from datetime import date
 from database.connection import connect_db
 
 class Candidatura:
-    def __init__(self, cpf_aluno, id_vaga, status, arquivo_curriculo, dt_candidatura=date.today()):
+    def __init__(self, cpf_aluno, id_vaga, status, arquivo_curriculo=None, dt_candidatura=date.today()):
         self.cpf_aluno = cpf_aluno
         self.id_vaga = id_vaga
         self.status = status
@@ -37,7 +37,7 @@ class Candidatura:
 
             existe_candidatura = self.__exists()
             if existe_candidatura:
-                print(f"Erro: O aluno {self.cpf_aluno} já se candidatou para a vaga {self.id_vaga}.")
+                print(f"Erro: O aluno já se candidatou para a vaga {self.id_vaga}.")
                 return
 
             sql = """
@@ -49,7 +49,7 @@ class Candidatura:
             
             conn.commit()
 
-            print(f"Candidatura do aluno {self.cpf_aluno} para a vaga {self.id_vaga} realizada com sucesso.")
+            print(f"Candidatura do aluno para a vaga {self.id_vaga} realizada com sucesso.")
 
         except Exception as e:
             print(f"Erro ao criar candidatura: {e}")
@@ -70,7 +70,7 @@ class Candidatura:
 
             existe_candidatura = self.__exists()
             if not existe_candidatura:
-                print(f"Erro: Não existe candidatura para o aluno {self.cpf_aluno} na vaga {self.id_vaga}.")
+                print(f"Erro: Não existe candidatura para o aluno na vaga {self.id_vaga}.")
                 return
 
             sql = """UPDATE CANDIDATURA SET STATUS_CANDIDATURA = %s WHERE CPF = %s AND ID_VAGA = %s;"""
@@ -79,7 +79,7 @@ class Candidatura:
             conn.commit()
 
             self.status = novo_status
-            print(f"Status da candidatura ({self.cpf_aluno}, {self.id_vaga}) atualizado para '{self.status}'.")
+            print(f"Status da candidatura atualizado para '{self.status}'.")
 
         except Exception as e:
             print(f"Erro ao atualizar status da candidatura: {e}")
@@ -102,9 +102,9 @@ class Candidatura:
                            (self.cpf_aluno, self.id_vaga))
             
             if cursor.rowcount == 0:
-                print(f"Aviso: Nenhuma candidatura encontrada para o aluno {self.cpf_aluno} na vaga {self.id_vaga}.")
+                print(f"Aviso: Nenhuma candidatura encontrada para o aluno na vaga {self.id_vaga}.")
             else:
-                print(f"Candidatura ({self.cpf_aluno}, {self.id_vaga}) removida com sucesso.")
+                print("Candidatura removida com sucesso.")
 
             conn.commit()
 
@@ -181,3 +181,28 @@ class Candidatura:
                 conn.close()
 
         return candidaturas
+    
+    @classmethod
+    def get_curriculo_bytes(cls, cpf_aluno, id_vaga):
+        conn = None
+        curriculo_bytes = None
+
+        try:
+            conn = connect_db()
+            cursor = conn.cursor()
+
+            sql = "SELECT arquivo_curriculo FROM CANDIDATURA WHERE cpf = %s AND id_vaga = %s"
+            cursor.execute(sql, (cpf_aluno, id_vaga))
+            
+            resultado = cursor.fetchone()
+            if resultado:
+                curriculo_bytes = resultado[0]
+
+        except Exception as e:
+            print(f"Erro ao buscar currículo do banco de dados: {e}")
+        finally:
+            if conn:
+                cursor.close()
+                conn.close()
+        
+        return curriculo_bytes

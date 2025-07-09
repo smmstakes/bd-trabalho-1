@@ -1,6 +1,11 @@
 import os
+import subprocess
+
 from rich.prompt import Prompt
 from rich.console import Console
+
+import tkinter as tk
+from tkinter import filedialog
 
 console = Console()
 
@@ -14,4 +19,24 @@ def solicitar_entrada_obrigatoria(prompt_text):
             return valor
         else:
             console.print("[bold red]Este campo é obrigatório. Por favor, forneça um valor.[/bold red]")
-  
+
+def selecionar_arquivo():
+    root = tk.Tk()
+    root.withdraw()
+
+    console.print("\n[bold yellow]Aguardando seleção de arquivo...[/bold yellow]")
+
+    try: 
+        # Comando para abrir o diálogo de seleção de arquivo com kdialog
+        comando = ["kdialog", "--getopenfilename", os.path.expanduser("~"), 
+                   "*.pdf | *.docx | *.*"]
+        
+        # Executa o comando e captura a saída
+        resultado = subprocess.run(comando, capture_output=True, text=True, check=True)
+ 
+        caminho_arquivo = resultado.stdout.strip()
+        if caminho_arquivo:
+            return caminho_arquivo
+        
+    except (FileNotFoundError, subprocess.CalledProcessError):
+        console.print("[bold yellow]Arquivo não selecionado.[/bold yellow]")

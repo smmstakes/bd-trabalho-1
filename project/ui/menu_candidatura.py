@@ -17,7 +17,7 @@ class MenuCandidatura:
 
             self._exibir_opcoes_menu()
 
-            opcao = Prompt.ask("Escolha uma opção", choices=["1", "2", "3", "4", "5", "6"], default="6")
+            opcao = Prompt.ask("Escolha uma opção", choices=["1", "2", "3", "4", "5", "6", "7"], default="7")
 
             if opcao == "1": 
                 self._realizar_candidatura()
@@ -27,9 +27,11 @@ class MenuCandidatura:
                 self._ver_minhas_candidaturas()
             elif opcao == "4": 
                 self._atualizar_status()
-            elif opcao == "5": 
+            elif opcao == "5":
+                self._baixar_curriculo()
+            elif opcao == "6":
                 self._retirar_candidatura()
-            elif opcao == "6": 
+            elif opcao == "7": 
                 break
 
     def _realizar_candidatura(self):
@@ -45,19 +47,21 @@ class MenuCandidatura:
         if not id_vaga: 
             return
 
-        caminho_arquivo = solicitar_entrada_obrigatoria("Digite o caminho completo do arquivo do currículo")
+        caminho_arquivo = selecionar_arquivo()
+        curriculo_bytes = None
 
-        try:
-            with open(caminho_arquivo, 'rb') as file: 
-                curriculo_bytes = file.read()
+        if caminho_arquivo:
+            try:
+                with open(caminho_arquivo, 'rb') as file: 
+                    curriculo_bytes = file.read()
 
-            console.print("[green]Arquivo do currículo lido com sucesso![/green]")
+                console.print("[green]Arquivo do currículo lido com sucesso![/green]")
 
-        except FileNotFoundError:
-            console.print(f"[bold red]Erro: Arquivo não encontrado em '{caminho_arquivo}'.[/bold red]")
+            except FileNotFoundError:
+                console.print(f"[bold red]Erro: Arquivo não encontrado em '{caminho_arquivo}'.[/bold red]")
 
-            input("\nPressione Enter para continuar...")
-            return
+                input("\nPressione Enter para continuar...")
+                return
         
         nova_candidatura = Candidatura(cpf_aluno=cpf_aluno, id_vaga=id_vaga, status="Enviada",
                                        arquivo_curriculo=curriculo_bytes)
@@ -124,6 +128,53 @@ class MenuCandidatura:
         candidatura.update_status(novo_status)
 
         input("\nPressione Enter para continuar...")
+    
+    def _baixar_curriculo(self):
+        limpar_tela()
+
+        console.print("[bold green]Baixar Currículo de Candidatura[/bold green]", justify="center")
+
+        cpf_aluno = self._selecionar_aluno("Digite o CPF do aluno")
+        if not cpf_aluno: 
+            return
+
+        id_vaga = self._selecionar_vaga("Digite o ID da vaga da candidatura")
+        if not id_vaga: 
+            return
+
+        # Busca os bytes do currículo no banco
+        curriculo_bytes = Candidatura.get_curriculo_bytes(cpf_aluno, id_vaga)
+
+        if not curriculo_bytes:
+            console.print("[bold red]Currículo não encontrado para esta candidatura.[/bold red]")
+            input("\nPressione Enter para continuar...")
+            return
+
+        try: 
+            # Comando para abrir o diálogo de seleção de arquivo com kdialog
+            comando = ["kdialog", "--getsavefilename", os.path.expanduser("~"), 
+                    "*.pdf | *.docx | *.*"]
+            
+            resultado = subprocess.run(comando, capture_output=True, text=True, check=True)
+            caminho_salvar = resultado.stdout.strip()
+        
+        except (FileNotFoundError, subprocess.CalledProcessError):
+            console.print("[bold yellow]Arquivo não selecionado.[/bold yellow]")
+
+        if not caminho_salvar:
+            console.print("[yellow]Nenhum local selecionado. Operação cancelada.[/yellow]")
+            input("\nPressione Enter para continuar...")
+            return
+
+        try:
+            with open(caminho_salvar, 'wb') as file:
+                file.write(curriculo_bytes)
+            console.print(f"[bold green]Currículo salvo com sucesso em: {caminho_salvar}[/bold green]")
+
+        except Exception as e:
+            console.print(f"[bold red]Ocorreu um erro ao salvar o arquivo: {e}[/bold red]")
+
+        input("\nPressione Enter para continuar...")
 
     def _retirar_candidatura(self):
         limpar_tela()
@@ -133,13 +184,15 @@ class MenuCandidatura:
         cpf_aluno = self._selecionar_aluno("Digite o seu CPF")
         if not cpf_aluno: 
             return
-        
+
         candidaturas = self._busca_candidatura_aluno(cpf_aluno)
         if not candidaturas:
             return
         self._mostra_tabela_candidatura_aluno(candidaturas, cpf_aluno)
 
-        choices = [str(cndt[1]) for cndt in candidaturas]
+        choices = []
+        for vaga in candidaturas:
+            choices.append(str(vaga[1]))
 
         while True:
             id_vaga_str = solicitar_entrada_obrigatoria("Digite o ID da vaga da qual deseja sair")
@@ -171,8 +224,9 @@ class MenuCandidatura:
         tabela_menu.add_row("2", "Ver Candidatos de uma Vaga")
         tabela_menu.add_row("3", "Ver Minhas Candidaturas")
         tabela_menu.add_row("4", "Atualizar Status de Candidatura")
-        tabela_menu.add_row("5", "Retirar Candidatura")
-        tabela_menu.add_row("6", "Voltar ao Menu Principal")
+        tabela_menu.add_row("5", "Baixar currículo")
+        tabela_menu.add_row("6", "Retirar Candidatura")
+        tabela_menu.add_row("7", "Voltar ao Menu Principal")
 
         console.print(tabela_menu)
 

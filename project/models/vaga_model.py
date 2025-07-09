@@ -230,4 +230,3 @@ class Vaga:
                 conn.close()
 
         return vaga_obj
-    
