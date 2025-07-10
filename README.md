@@ -81,6 +81,20 @@ cd bd-trabalho-1/project
     pip install -r requirements.txt
     ```
 
+#### 4.1 Utilizando o Conda
+
+Se você preferir usar o Conda, siga os passos abaixo:
+
+1.  **Crie o Ambiente Conda:**
+    ```bash
+    conda env create --name bd-trabalho-1-env --file environment.yml
+    ```
+
+2.  **Ative o Ambiente Conda:**
+    ```bash
+    conda activate bd-trabalho-1-env
+    ```
+
 ### 5. Configuração da Conexão
 
 **Este é um passo crucial.** Abra o arquivo `database/connection.py` e altere as credenciais de conexão para as que você configurou no seu PostgreSQL local.
