@@ -150,29 +150,20 @@ class MenuCandidatura:
             input("\nPressione Enter para continuar...")
             return
 
-        try: 
-            # Comando para abrir o diálogo de seleção de arquivo com kdialog
-            comando = ["kdialog", "--getsavefilename", os.path.expanduser("~"), 
-                    "*.pdf | *.docx | *.*"]
-            
-            resultado = subprocess.run(comando, capture_output=True, text=True, check=True)
-            caminho_salvar = resultado.stdout.strip()
+        console.print("[bold yellow]Selecione o caminho para salvar o curriculo.[/bold yellow]")
+
+        caminho_salvar = self._selecionar_caminho_salvar()
         
-        except (FileNotFoundError, subprocess.CalledProcessError):
-            console.print("[bold yellow]Arquivo não selecionado.[/bold yellow]")
-
-        if not caminho_salvar:
-            console.print("[yellow]Nenhum local selecionado. Operação cancelada.[/yellow]")
-            input("\nPressione Enter para continuar...")
-            return
-
         try:
             with open(caminho_salvar, 'wb') as file:
                 file.write(curriculo_bytes)
             console.print(f"[bold green]Currículo salvo com sucesso em: {caminho_salvar}[/bold green]")
 
         except Exception as e:
-            console.print(f"[bold red]Ocorreu um erro ao salvar o arquivo: {e}[/bold red]")
+            if "expected str, bytes or os.PathLike object" in str(e):
+                console.print("[bold red]Não foi possível salvar o arquivo, caminho não informado.[/bold red]")
+            else:
+                console.print(f"[bold red]Ocorreu um erro ao salvar o arquivo: {e}[/bold red]")
 
         input("\nPressione Enter para continuar...")
 
@@ -322,3 +313,17 @@ class MenuCandidatura:
                 return int(id_str)
             
             console.print(f"[bold red]ID '{id_str}' inválido.[/bold red]")
+    
+    def _selecionar_caminho_salvar(self):
+        app = QApplication.instance()
+        if not app:
+            app = QApplication(sys.argv)
+
+        caminho_salvar, _ = QFileDialog.getSaveFileName(
+            None,
+            "Salvar currículo como",
+            os.path.expanduser("~"),
+            "Documentos (*.pdf *.docx);;Todos os Arquivos (*)"
+        )
+
+        return caminho_salvar if caminho_salvar else None
